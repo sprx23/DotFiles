@@ -1,0 +1,251 @@
+@define-color secondary #dddddd;
+@define-color primary #ffffff;
+@define-color alt #337788;
+@define-color bg #334455;
+@define-color bgh #337788;
+
+@define-color alert #ff4411;
+
+* {
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  color: @secondary;
+  font-family: "JetBrainsMono NerdFont", "JetBrainsMono";
+}
+
+window#waybar {
+  background: @bg;
+  margin: 5px 10px;
+  outline: 1px solid green;
+}
+
+/*#workspaces {
+  margin: 0px 0px;
+  padding: 1px 4px;
+}
+#workspaces button {
+  min-width: 20px;
+  padding: 0 4px;
+  margin: 0px 0px;
+  color: @secondary;
+  border-bottom: 3px solid transparent;
+}
+#workspaces button.focused {
+  background-color: @bgh;
+  border-bottom: 3px solid @primary;
+}
+#workspaces button.focused label {
+  color: @primary;
+}
+#workspaces button:hover:not(.focused) {
+  border: 0px solid transparent;
+  border-bottom: 3px solid @primary;
+}
+#workspaces button:hover:not(.focused) label {
+  background-color: @bg;
+}*/
+
+/* Compact Polybar-Style Workspaces Container */
+#workspaces {
+    margin: 0px;
+    padding: 0px;
+}
+
+/* Base button styling - Minimal spacing, transparent background */
+#workspaces button {
+    min-width: 20px;
+    padding: 1px 4px;
+    margin: 0px 2px;
+    color: #74c7ec; /* Subtle, clean color for inactive workspace numbers */
+    background-color: transparent;
+    border-radius: 0px;
+    
+    /* Smooth Polybar-like transition for actions */
+    transition: all 0.15s ease-in-out;
+    border-bottom: 2px solid transparent;
+}
+
+/* Focused / Active Workspace */
+#workspaces button.focused {
+    color: #ffffff; /* Pure white text for maximum readability */
+    background-color: #1e293b; /* Deep, dark charcoal for sharp contrast against your #334455 bg */
+    border-bottom: 2px solid #00f5d4; /* Bright neon teal underline that pops */
+    font-weight: bold;
+}
+
+/* Hover effect on inactive workspaces */
+#workspaces button:hover:not(.focused) {
+    color: #00f5d4; /* Text glows neon teal on hover */
+    background-color: #475a6f; /* Slightly lighter than your bg for a nice "lit up" effect */
+    border-bottom: 2px solid #00f5d4; 
+}
+
+/* Urgent Workspace (Needs attention) */
+#workspaces button.urgent {
+    color: #ff5a5f; /* High-visibility coral red */
+    background-color: #2a1b24; /* Dark wine-red background to contrast against your bg */
+    border-bottom: 2px solid #ff5a5f;
+}
+
+/* Clean up label inheritance */
+#workspaces button label {
+    padding: 0px;
+    margin: 0px;
+}
+
+#mode {
+  border: 1px solid @alert;
+  color: @alert;
+  padding: 0px 4px;
+  font-weight: bold;
+  margin: 4px 4px;
+  animation: pulse 1s infinite alternate;
+}
+@keyframes pulse {
+  from { color: @alert; }
+  to { color: transparent; }
+}
+
+/* --- 1. Disk (Blue) --- */
+#disk {
+    background-color: #89b4fa;
+    color: #11111b;
+    padding: 0 10px;
+    margin: 4px 2px;
+    border-radius: 6px;
+}
+
+/* --- 2. CPU (Green) --- */
+#cpu {
+    background-color: #a6e3a1;
+    color: #11111b;
+    padding: 0 10px;
+    margin: 4px 2px;
+    border-radius: 6px;
+}
+#cpu.warning { background-color: #fab387; }
+#cpu.critical { background-color: #f38ba8; font-weight: bold; }
+
+/* --- 3. Memory (Purple) --- */
+#memory {
+    background-color: #cba6f7;
+    color: #11111b;
+    padding: 0 10px;
+    margin: 4px 2px;
+    border-radius: 6px;
+}
+#memory.warning { background-color: #fab387; }
+#memory.critical { background-color: #f38ba8; }
+
+/* --- 4. Bluetooth (Light Blue/Lavender) --- */
+#bluetooth {
+    background-color: #b4befe;
+    color: #11111b;
+    padding: 0 10px;
+    margin: 4px 2px;
+    border-radius: 6px;
+}
+#bluetooth.disabled { background-color: #45475a; color: #a6adc8; }
+
+/* --- 5. Network (Mint Teal) --- */
+#network {
+    background-color: #94e2d5;
+    color: #11111b;
+    padding: 0 10px;
+    margin: 4px 2px;
+    border-radius: 6px;
+}
+#network.disconnected { background-color: #f38ba8; font-weight: bold; }
+
+/* --- 6. PulseAudio (Orange) --- */
+#pulseaudio {
+    background-color: #fab387;
+    color: #11111b;
+    padding: 0 10px;
+    margin: 4px 2px;
+    border-radius: 6px;
+}
+#pulseaudio.muted { background-color: #585b70; color: #a6adc8; }
+
+/* --- 7. Backlight (Yellow) --- */
+#backlight, #custom-backlight {
+    background-color: #f9e2af;
+    color: #11111b;
+    padding: 0 10px;
+    margin: 4px 2px;
+    border-radius: 6px;
+}
+
+/* --- 8. Keyboard State (Peach/Rosewater) --- */
+#keyboard-state {
+    background-color: #f5e0dc;
+    color: #11111b;
+    padding: 0 10px;
+    margin: 4px 2px;
+    border-radius: 6px;
+}
+
+/* --- 9. Clock (Soft Pink) --- */
+#clock {
+    background-color: #f5c2e7;
+    color: #11111b;
+    padding: 0 10px;
+    margin: 4px 2px;
+    border-radius: 6px;
+}
+
+/* --- 10. Idle Inhibitor (Flamingo Red/Pink) --- */
+#idle_inhibitor {
+    background-color: #f2cdcd;
+    color: #11111b;
+    padding: 0 10px;
+    margin: 4px 2px;
+    border-radius: 6px;
+}
+/* Visual indicator for when sleep inhibition is active */
+#idle_inhibitor.activated {
+    background-color: #f38ba8; /* Brighter dark pink/red */
+    font-weight: bold;
+}
+
+
+/* --- Terminal Button --- */
+#custom-terminal {
+    background-color: #89b4fa; /* Pastel Blue */
+    color: #11111b;
+    padding: 0 12px;
+    margin: 4px;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+/* --- Power Button Panel --- */
+#custom-power {
+    background-color: #f38ba8; /* Pastel Red/Pink */
+    color: #11111b;
+    padding: 0 12px;
+    margin: 4px;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+/* --- Dropdown Menu Container --- */
+menu {
+    background-color: #1e1e2e; /* Dark theme background */
+    border: 1px solid #f38ba8;
+    border-radius: 8px;
+    padding: 4px;
+}
+
+/* --- Menu Row Items --- */
+menuitem {
+    color: #cdd6f4;
+    padding: 4px 12px;
+    transition: all 0.2s ease;
+}
+
+/* --- Hovering Over Menu Options --- */
+menuitem:hover {
+    background-color: #f38ba8;
+    color: #11111b;
+    border-radius: 4px;
+}

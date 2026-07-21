@@ -1,0 +1,166 @@
+{
+  "layer": "top",
+  "position": "top",
+  "margin-top": 5,
+  "margin-bottom": 5,
+  "margin-left": 10,
+  "margin-right": 10,
+  "modules-left": [
+    "custom/terminal",
+    "sway/workspaces",
+    "sway/mode"
+  ],
+  "modules-right": [
+    "pulseaudio",
+    "custom/backlight",
+    "disk",
+    "cpu",
+    "memory",
+    "network",
+    "clock",
+    "idle_inhibitor"
+  ],
+  "sway/mode": {
+    "format": "{}",
+    "max-length": 10,
+    "align": 0.5
+  },
+  "sway/window": {
+    "format": "| {}"
+  },
+"disk": {
+        "interval": 30,
+        "format": "󱘲 {percentage_used}%",
+        "path": "/",
+        "tooltip-format": "{used} used out of {total} on {path}"
+    },
+    "cpu": {
+        "interval": 2,
+        "format": " {usage}%",
+        "states": {
+            "warning": 70,
+            "critical": 90
+        },
+        "on-click": "kitty --class floating_terminal -e htop -s PERCENT_CPU"
+    },
+    "memory": {
+        "interval": 5,
+        "format": " {percentage}%",
+        "states": {
+            "warning": 80,
+            "critical": 95
+        },
+        "tooltip-format": "RAM: {used:0.1f}GiB / {total:0.1f}GiB\nSwap: {swapUsed:0.1f}GiB / {swapTotal:0.1f}GiB",
+        "on-click": "kitty --class floating_terminal -e htop -s PERCENT_MEM"
+    },
+"bluetooth": {
+        "format": " {status}",
+        "format-disabled": " off",
+        "format-connected": " {num_connections}",
+        "tooltip-format": "{controller_alias}\t{controller_address}",
+        "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{device_enumerate}",
+        "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
+        "on-click": "blueman-manager"
+    },
+
+    "network": {
+        "format-wifi": "  {essid}",
+        "format-ethernet": "󰈀  {ipaddr}/{cidr}",
+        "format-linked": "󰈀  {ifname} (No IP)",
+        "format-disconnected": "  Disconnected",
+"tooltip-format-wifi": "Network: {essid}\nFreq: {frequency}GHz\nSignal: {signalStrength}% \nPower: {signaldBm}dBm",
+        "on-click": "$HOME/.config/waybar/wifi.sh"
+    },
+
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-bluetooth": "{icon} {volume}%",
+        "format-muted": " Muted",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "󱡏",
+            "headset": "󰋎",
+            "phone": "",
+            "portable": "",
+            "car": "",
+            "default": ["", ""]
+        },
+        "scroll-step": 5,
+        "on-click": "pavucontrol"
+    },
+
+    "backlight": {
+        "format": "{icon} {percent}%",
+        "format-icons": ["󰃞", "󰃟", "󰃠"],
+        "scroll-step": 5
+    },
+
+"keyboard-state": {
+        "numlock": true,
+        "capslock": true,
+        "format": "  {name} {icon}",
+        "format-icons": {
+            "locked": "",
+            "unlocked": ""
+        }
+    },
+
+    "clock": {
+        "format": "  {:%I:%M %p}",
+        "format-alt": "  {:%A, %B %d, %Y}",
+        "tooltip-format": "<tt><small>{calendar}</small></tt>",
+        "calendar": {
+            "mode": "year",
+            "mode-mon-col": 3,
+            "weeks-pos": "right",
+            "on-scroll": 1,
+            "format": {
+                "months": "<span color='#ffead3'><b>{}</b></span>",
+                "days": "<span color='#ecc6d9'><b>{}</b></span>",
+                "weeks": "<span color='#99ff99'><b>W{}</b></span>",
+                "weekdays": "<span color='#ffcc66'><b>{}</b></span>",
+                "today": "<span color='#ff6666'><b><u>{}</u></b></span>"
+            }
+        }
+    },
+
+    "idle_inhibitor": {
+        "format": "{icon}",
+        "format-icons": {
+            "activated": "  Awake",
+            "deactivated": "  Sleep"
+        }
+    },
+
+"custom/terminal": {
+        "format": " Linux",
+        "tooltip": true,
+        "tooltip-format": "Open Terminal",
+        // Replace 'kitty' with your terminal emulator (e.g., alacritty, foot)
+        "on-click": "xfce4-terminal" 
+    },
+
+    // --- GTK DROPDOWN POWER MENU MODULE ---
+    "custom/power": {
+        "format": "⏻",
+        "tooltip": false,
+        // Tells Waybar to open a GTK context menu when clicked
+        "menu": "on-click",
+        "menu-file": "$HOME/.config/waybar/power_menu.xml", 
+"menu-actions": {
+    "shutdown": "shutdown -h now",
+    "reboot": "reboot",
+    "suspend": "zzz",
+    "hibernate": "ZZZ"
+}
+    },
+"custom/backlight": {
+    "interval": 2,
+    "exec": "light -G | cut -d'.' -f1",
+    "format": "󰃠 {}%",
+    "on-scroll-up": "light -A 5",
+    "on-scroll-down": "light -U 5",
+    "tooltip": false
+}
+}
+
