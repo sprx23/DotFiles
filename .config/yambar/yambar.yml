@@ -1,0 +1,170 @@
+bar:
+  height: 26
+  location: top
+  spacing: 0
+  background: 000000aa
+  font: "JetBrainsMono Nerd Font:pixelsize=14"
+  border:
+    bottom-width: 2
+    color: dd9900ff
+
+  left:
+    - label:
+        content:
+          - string:
+              text: "[Menu] "
+              on-click: "rofi -show drun"
+              #on-click: "alacritty --class=start_menu -e sh $HOME/.config/yambar/start_menu.sh"
+    - i3:
+        spacing: 0
+        anchors:
+          - on-click: &click_action
+              left: "swaymsg workspace {name}"
+              right: "swaymsg workspace {name}"
+              wheel-up: "swaymsg workspace prev"
+              wheel-down: "swaymsg workspace next"
+        sort: native
+        #strip-workspace-numbers: false
+        content:
+          "":
+            map:
+              conditions:
+                state == focused:
+                  string:
+                    text: "[{name}]"
+                    foreground: ffffffff
+                    deco:
+                      stack:
+                        - background:
+                            color: ffffff33
+                    on-click: *click_action
+                state == urgent:
+                  string:
+                    text: " {name}!"
+                    foreground: ff2200ff
+                    on-click: *click_action
+                state == invisible:
+                  string:
+                    text: " {name} "
+                    foreground: ccccccff
+                    on-click: *click_action
+          mode:
+            map:
+              conditions:
+                mode != "":
+                  string:
+                    text: "[{mode}]"
+                    foreground: ff2200ff
+    - script:
+        anchors:
+          - idkwhat: &music_title_text
+              max: 40
+              on-click:
+                left: "playerctl play-pause"
+                wheel-up: "playerctl position 5+"
+                wheel-down: "playerctl position 5-"
+                right: "playerctl next"
+                middle: "playerctl previous"
+        path: /bin/sh
+        args: 
+          - -c
+          - |
+            playerctl metadata --format 'title|{{title}}|artist|{{artist}}|status|{{status}}' --follow | while read -r line; do
+              title=$(playerctl metadata title 2>/dev/null)
+              artist=$(playerctl metadata artist 2>/dev/null)
+              status=$(playerctl status 2>/dev/null)
+              echo "title|string|${title:-No Track}"
+              echo "artist|string|${artist:-Unknown}"
+              echo "status|string|${status:-Stopped}"
+              echo ""
+            done
+        content:
+          map:
+            conditions:
+              status == Playing:
+                string: {<<: *music_title_text, text: "  {title} - {artist}" }
+              status == Paused:
+                string: {<<: *music_title_text, text: "  {title} - {artist}" }
+
+  center:
+    - clock:
+        time-format: "%I:%M %p"
+        date-format: "%a, %d %b %Y"
+        content:
+          - string: {text: "󰥔 {time}  󰸗 {date}"}
+  right:
+    - pipewire:
+        anchors:
+          - on-click: &click_action2
+              left: "pactl set-sink-volume @DEFAULT_SINK@ -3%"
+              right: "pactl set-sink-volume @DEFAULT_SINK@ +3%"
+              wheel-down: "pactl set-sink-volume @DEFAULT_SINK@ -3%"
+              wheel-up: "pactl set-sink-volume @DEFAULT_SINK@ +3%"
+        content:
+           map:
+            conditions:
+              type == "sink": 
+                ramp:
+                  tag: cubic_volume
+                  items:
+                    - string: {text: "󰕾 {cubic_volume}%  ", on-click: *click_action2}
+                    - string: {text: "󰕾 {cubic_volume}%  ", on-click: *click_action2}
+                    - string: {text: "󰕾 {cubic_volume}%  ", on-click: *click_action2}
+    - backlight:
+        name: intel_backlight
+        content:
+          - string: 
+              text: "󰃠 {percent}%  "
+              on-click:
+                wheel-up: "light -A 5%"
+                wheel-down: "light -U 5%"
+                left:  "light -U 5%"
+                right: "light -A 5%"
+    - mem:
+        poll-interval: 2500
+        content:
+          map:
+            conditions:
+              percent_used > 80:
+                string:
+                  text: " {percent_used}%  "
+                  foreground: ff2200ff
+              percent_used < 80:
+                string:
+                  text: " {percent_used}%  "
+    #- cpu:
+    #    poll-interval: 1000
+    #    content:
+    #      map:
+    #        conditions:
+    #          cpu > 80 && id == -1:
+    #            string: { text: " {cpu}% ", foreground: ff2200ff }
+    #          cpu < 80 && id == -1:
+    #            string: { text: " {cpu}% " }
+    - network:
+        #name: wlp3s0 # do same for wlan0 and lan
+        poll-interval: 2000
+        content:
+          map:
+            conditions:
+              state == "up" && quality > 0 && ssid != "":
+                string: { text: "{name}:{ssid}({quality}%) " }
+              state == "up" && quality > 0:
+                string: { text: "{name}:{quality}% " }
+              state == "up":
+                string: { text: "{name} " }
+              name == "wlp3s0":
+                string: { text: "{name}:{state} " }
+              #state != "up":
+              #  string: { text: "{name}:{state} " }
+              #state == "up" && ssid == "":
+              #  string:
+              #    text: "󰤭 Disconnected"
+              #    foreground: ff2200ff
+              #state == "up" && ssid != "":
+              #  string:
+              #    text: "󰤨 {ssid} {quality}%"
+              #state != "up" && name == "wlp3s0":
+              #  string:
+              #    text: "󰤭 {state}"
+              #    foreground: ff2200ff
